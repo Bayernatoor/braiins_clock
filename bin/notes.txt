@@ -1,0 +1,14 @@
+tag: "ok_workers", 
+?pair=ASIC/UP
+tag:"off_worker" 
+?pair=ASIC/DOWN
+tag: "hash_rate_5m", "hash_rate_60m", "hash_rate_24h", "hash_rate_scoring")
+?pair=TH/S
+
+Any other tag 
+tag: "confirmed_reward", "unconfirmed_reward", "estimated_reward", "alltime_reward" 
+?sym=bitcoin
+
+All other tags handled by blockclock API. 
+
+
