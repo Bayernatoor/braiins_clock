@@ -12,7 +12,9 @@ pub async fn program_loop() -> () {
 
         let url_to_send = requests::send_to_blockclock::clock_tags_url(active_tag.to_string(), None).await;
    
-        requests::send_to_blockclock::send_to_blockclock(url_to_send);
+        let request = requests::send_to_blockclock::send_to_blockclock(url_to_send).await;
+        
+
         //for t in &tags {
         //     println!("{}", t);
         //};

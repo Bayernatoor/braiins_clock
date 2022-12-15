@@ -10,12 +10,11 @@ use crate::helpers::startup;
 use crate::run::program_loop;
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn Error>>{
+async fn main() -> () {
     let intro_text=  startup::introduction(); 
     println!("{}", intro_text);
 
     program_loop::program_loop().await; 
-    Ok(())
 }
 
 //1. Constants for URL and headers as well as blockclock IP
