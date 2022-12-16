@@ -85,6 +85,7 @@ pub fn select_tags() -> Vec<String> {
     println!("");
 
     let mut selected_tags: Vec<String> = Vec::new();
+    let mut displayed_tags: Vec<String> = Vec::new();
     let mut selected = String::new(); 
     
     loop {
@@ -108,16 +109,15 @@ pub fn select_tags() -> Vec<String> {
         if valid_ints.contains(&selected) {
             for (k, v) in tags.iter().enumerate() {
                 if k == selected {
-                    selected_tags.push(v.0.to_string());
+                    selected_tags.push(v.1.to_string());
+                    displayed_tags.push(v.0.to_string());
                 }
             }   
         } 
-
-        //println!("The Vec contains: {:#?}", selected_tags);
         continue;
     }
     println!("The following tags will be displayed continuously, to stop press CTRL-C:");
-    println!("{:#?}", selected_tags);
+    println!("{:#?}", displayed_tags);
     println!("----------");
     return selected_tags;
 

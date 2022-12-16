@@ -1,3 +1,5 @@
+use reqwest::Response;
+
 use crate::requests::make_request;
 use crate::client::build_client;
 use std::{error::Error, num::ParseFloatError, fmt::Debug};
@@ -19,23 +21,23 @@ impl<'a> URL<'a> {
         URL { protocol: "http://", domain: {BLOCKCLOCK_IP}, path, result, query}
     } 
     
-    fn new_blockclock_url(path: &'a str, result: String, query: Option<String>) -> URL<'a> {
-        URL { protocol: "http://", domain: {BLOCKCLOCK_IP}, path, result, query}
+    fn new_blockclock_url(path: &'a str, result: String) -> URL<'a> {
+        URL { protocol: "http://", domain: {BLOCKCLOCK_IP}, path, result, query: None}
+        
     } 
     
     fn build_url(&self) -> String {
        return format!("{}{}{}{}{:?}", self.protocol, self.domain, self.path, self.result, self.query);
     }
 
-    //fn to_float(&self) -> Result<f64, ParseFloatError> {
-    //    return self.result.parse::<f64>().unwrap.expect("Could not parse to float");
-    //}
-
+    fn build_blockclock_url(&self) -> String {
+       return format!("{}{}{}{}", self.protocol, self.domain, self.path, self.result);
+    }
 }
 
 // matches the selected tag with the appropriate symbol for url construction 
-fn select_symbol(t: &str) -> String {
-       let symbol =  match t {
+fn select_symbol(tag: &str) -> String {
+       let symbol =  match tag {
             "confirmed_reward" | "unconfirmed_reward" |  "estimated_reward" | "alltime_reward" => String::from("?pair=bitcoin"),
             "off_workers" => String::from("?pair=ASIC/UP"),
             "ok_workers" => String::from("?pair=ASIC/UP"),
@@ -73,14 +75,14 @@ pub async fn get_slushpool_stats(tag: String) -> Result<f64, Box<dyn Error>> {
     Ok(to_float?)
 }
 
-pub async fn send_to_blockclock(url: String) -> Result<(), Box<dyn Error>> {
+pub async fn send_to_blockclock(url: String) -> Result<Response, Box<dyn Error>> {
     let block_client = build_client::create_client();
     let dispatch_to_blockclock = block_client?
         .get(url)
         .send()
-        .await;
+        .await?;
     
-    Ok(())
+    Ok(dispatch_to_blockclock)
 }
 
 pub async fn slush_tags_url(tag: f64, query: Option<String>) -> String {
@@ -91,7 +93,8 @@ pub async fn slush_tags_url(tag: f64, query: Option<String>) -> String {
     return url
 }
 
-pub async fn clock_tags_url(result: String, query: Option<String>) -> String {
-    let url = URL::new_blockclock_url("/api/pick/", result, query).build_url();
+pub async fn clock_tags_url(result: String) -> String {
+    let url = URL::new_blockclock_url("/api/pick/", result).build_blockclock_url();
+    println!("THE URL IS {}", url);
     return url
 }

@@ -2,7 +2,7 @@ use std::error::Error;
 use reqwest::{header, Client};
 
 const HEADERS: &str = "SlushPool-Auth-Token";
-const HEADER_VALUE: &str = "<YOUR-SLUSHPOOL-AUTH-TOKEN";
+const HEADER_VALUE: &str = "<YOUR_SLUSHPOOL_API_KEY>";
 
 pub fn create_client() -> Result<Client, Box<dyn Error>>{
     let mut headers = header::HeaderMap::new();
