@@ -10,7 +10,13 @@ pub async fn program_loop() -> () {
         let active_tag = &tags.remove(0);
         tags.push(active_tag.to_string());
 
-        let url_to_send = requests::send_to_blockclock::clock_tags_url(active_tag.to_string()).await;
+        let symbol = select_symbol(active_tag);
+        println!("TAG: {:?}", active_tag);
+        println!("Symbol: {:?}", symbol);
+    
+
+        //let url_to_send = requests::send_to_blockclock::clock_tags_url(active_tag.to_string()).await;
+        let url_to_send = requests::send_to_blockclock::slush_tags_url(active_tag.to_string(), Some(symbol)).await;
    
         let request = requests::send_to_blockclock::send_to_blockclock(url_to_send).await;
 

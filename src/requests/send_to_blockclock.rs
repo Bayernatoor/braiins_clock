@@ -36,9 +36,9 @@ impl<'a> URL<'a> {
 }
 
 // matches the selected tag with the appropriate symbol for url construction 
-fn select_symbol(tag: &str) -> String {
+pub fn select_symbol(tag: &str) -> String {
        let symbol =  match tag {
-            "confirmed_reward" | "unconfirmed_reward" |  "estimated_reward" | "alltime_reward" => String::from("?pair=bitcoin"),
+            "confirmed_reward" | "unconfirmed_reward" |  "estimated_reward" | "all_time_reward" => String::from("?pair=bitcoin"),
             "off_workers" => String::from("?pair=ASIC/UP"),
             "ok_workers" => String::from("?pair=ASIC/UP"),
             "hash_rate_5m" | "hash_rate_60m" |  "hash_rate_24h" | "hash_rate_scoring" => String::from("?pair=TH/S"),
@@ -85,11 +85,15 @@ pub async fn send_to_blockclock(url: String) -> Result<Response, Box<dyn Error>>
     Ok(dispatch_to_blockclock)
 }
 
-pub async fn slush_tags_url(tag: f64, query: Option<String>) -> String {
+pub async fn slush_tags_url(tag: String, query: Option<String>) -> String {
      
-    let result = tag.to_string();
-
+    let result = get_slushpool_stats(tag)
+        .await
+        .unwrap()
+        .to_string();
+ 
     let url = URL::new_slush_url("/api/show/number/", result, query).build_url();
+    println!("THE URL IS {}", url);
     return url
 }
 
