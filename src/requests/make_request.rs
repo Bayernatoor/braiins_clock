@@ -3,7 +3,7 @@ use std::{error::Error, fmt::Debug};
 use serde::{Serialize, Deserialize};
 use std::num::ParseFloatError;
 
-const SLUSH_POOL_URL: &str = "https://slushpool.com/accounts/profile/json/btc/";
+const SLUSH_POOL_URL: &str = "https://pool.braiins.com/accounts/profile/json/btc/";
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Stats {

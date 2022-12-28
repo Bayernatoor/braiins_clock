@@ -12,22 +12,22 @@ pub struct URL<'a> {
     domain: &'a str,
     path: &'a str,
     result: String,
-    query: Option<String>,
+    query: String,
 }
 
 impl<'a> URL<'a> {
 
-    fn new_slush_url(path: &'a str, result: String, query: Option<String>) -> URL<'a> {
+    fn new_slush_url(path: &'a str, result: String, query: String) -> URL<'a> {
         URL { protocol: "http://", domain: {BLOCKCLOCK_IP}, path, result, query}
     } 
     
-    fn new_blockclock_url(path: &'a str, result: String) -> URL<'a> {
-        URL { protocol: "http://", domain: {BLOCKCLOCK_IP}, path, result, query: None}
+    fn new_blockclock_url(path: &'a str, result: String, query: String) -> URL<'a> {
+        URL { protocol: "http://", domain: {BLOCKCLOCK_IP}, path, result, query}
         
     } 
     
     fn build_url(&self) -> String {
-       return format!("{}{}{}{}{:?}", self.protocol, self.domain, self.path, self.result, self.query);
+       return format!("{}{}{}{}{}", self.protocol, self.domain, self.path, self.result, self.query);
     }
 
     fn build_blockclock_url(&self) -> String {
@@ -38,11 +38,11 @@ impl<'a> URL<'a> {
 // matches the selected tag with the appropriate symbol for url construction 
 pub fn select_symbol(tag: &str) -> String {
        let symbol =  match tag {
-            "confirmed_reward" | "unconfirmed_reward" |  "estimated_reward" | "all_time_reward" => String::from("?pair=bitcoin"),
+            "confirmed_reward" | "unconfirmed_reward" |  "estimated_reward" | "all_time_reward" => String::from("?sym=bitcoin"),
             "off_workers" => String::from("?pair=ASIC/UP"),
             "ok_workers" => String::from("?pair=ASIC/UP"),
             "hash_rate_5m" | "hash_rate_60m" |  "hash_rate_24h" | "hash_rate_scoring" => String::from("?pair=TH/S"),
-            _ => String::from("pair=bitcoin"),
+            _ => String::from("?sym=bitcoin"),
         };
         return symbol 
 
@@ -53,6 +53,8 @@ pub fn select_symbol(tag: &str) -> String {
 pub async fn get_slushpool_stats(tag: String) -> Result<f64, Box<dyn Error>> {
     let stats = make_request::make_request()
         .await?;
+
+    println!("stats IS: {:?}", stats);
 
     let to_float = match tag.as_ref() {
         "confirmed_reward" => stats.btc.confirmed_reward.parse::<f64>(),
@@ -85,20 +87,31 @@ pub async fn send_to_blockclock(url: String) -> Result<Response, Box<dyn Error>>
     Ok(dispatch_to_blockclock)
 }
 
-pub async fn slush_tags_url(tag: String, query: Option<String>) -> String {
-     
+pub async fn slush_tags_url(tag: String, query: String) -> String {
+    println!("TAG IS: {}", tag);
+    println!("query IS: {}", query);
+    
+    // need to better error handling for unwrap here. 
     let result = get_slushpool_stats(tag)
         .await
         .unwrap()
         .to_string();
- 
-    let url = URL::new_slush_url("/api/show/number/", result, query).build_url();
+
+    // add logic to properly format hash rate values from GH/s to TH/s divide by 1000
+    // should handle all this within this function for now.
+
+    println!("result IS: {:?}", result);
+
+    let result_splice = &result[0..7]; 
+    println!("new string  IS: {}", result_splice);
+
+    let url = URL::new_slush_url("/api/show/number/", result_splice.to_string(), query).build_url();
     println!("THE URL IS {}", url);
     return url
 }
 
-pub async fn clock_tags_url(result: String) -> String {
-    let url = URL::new_blockclock_url("/api/pick/", result).build_blockclock_url();
+pub async fn clock_tags_url(result: String, query: String) -> String {
+    let url = URL::new_blockclock_url("/api/pick/", result, query).build_blockclock_url();
     println!("THE URL IS {}", url);
     return url
 }
