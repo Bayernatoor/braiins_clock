@@ -1,15 +1,12 @@
-use std::error::Error;
 use reqwest::{header, Client};
+use std::error::Error;
 
 const HEADERS: &str = "SlushPool-Auth-Token";
-const HEADER_VALUE: &str = "<YOUR_SLUSHPOOL_API_KEY>";
+const HEADER_VALUE: &str = "<YOUR_SLUSHPOOL_API_KEY";
 
-pub fn create_client() -> Result<Client, Box<dyn Error>>{
+pub fn create_client() -> Result<Client, Box<dyn Error>> {
     let mut headers = header::HeaderMap::new();
-    headers.insert(
-        HEADERS, 
-        header::HeaderValue::from_static(HEADER_VALUE)
-    );
+    headers.insert(HEADERS, header::HeaderValue::from_static(HEADER_VALUE));
 
     let mut auth_value = header::HeaderValue::from_static(HEADER_VALUE);
     auth_value.set_sensitive(true);
@@ -20,7 +17,6 @@ pub fn create_client() -> Result<Client, Box<dyn Error>>{
         .build()?;
 
     Ok(client)
-    
 }
 
 //#[cfg(test)]
@@ -28,7 +24,7 @@ pub fn create_client() -> Result<Client, Box<dyn Error>>{
 //    use reqwest::Client;
 //    use std::error::Error;
 //
-//    
+//
 //    extern crate reqwest;
 //    extern crate tokio;
 //    extern crate serde;
@@ -36,6 +32,6 @@ pub fn create_client() -> Result<Client, Box<dyn Error>>{
 //
 //    #[test]
 //    fn test_create_client() -> Result<(), Box<dyn Error>> {
-//        
+//
 //        }
 //}

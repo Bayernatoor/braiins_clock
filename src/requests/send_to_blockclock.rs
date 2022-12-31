@@ -1,10 +1,10 @@
 use reqwest::Response;
 
-use crate::requests::make_request;
 use crate::client::build_client;
-use std::{error::Error, num::ParseFloatError, fmt::Debug};
+use crate::requests::make_request;
+use std::{error::Error, fmt::Debug};
 
-const BLOCKCLOCK_IP: &str = "192.168.1.15";
+const BLOCKCLOCK_IP: &str = "<YOUR_BLOCKCLOCK_IP_ADDRESS>";
 
 #[derive(Debug)]
 pub struct URL<'a> {
@@ -16,46 +16,57 @@ pub struct URL<'a> {
 }
 
 impl<'a> URL<'a> {
+    fn new_url(path: &'a str, result: String, query: String) -> URL<'a> {
+        URL {
+            protocol: "http://",
+            domain: { BLOCKCLOCK_IP },
+            path,
+            result,
+            query,
+        }
+    }
 
-    fn new_slush_url(path: &'a str, result: String, query: String) -> URL<'a> {
-        URL { protocol: "http://", domain: {BLOCKCLOCK_IP}, path, result, query}
-    } 
-    
-    fn new_blockclock_url(path: &'a str, result: String, query: String) -> URL<'a> {
-        URL { protocol: "http://", domain: {BLOCKCLOCK_IP}, path, result, query}
-        
-    } 
-    
     fn build_url(&self) -> String {
-       return format!("{}{}{}{}{}", self.protocol, self.domain, self.path, self.result, self.query);
+        return format!(
+            "{}{}{}{}{}",
+            self.protocol, self.domain, self.path, self.result, self.query
+        );
     }
 
     fn build_blockclock_url(&self) -> String {
-       return format!("{}{}{}{}", self.protocol, self.domain, self.path, self.result);
+        return format!(
+            "{}{}{}{}",
+            self.protocol, self.domain, self.path, self.result
+        );
     }
 }
 
-// matches the selected tag with the appropriate symbol for url construction 
+// matches the selected tag with the appropriate symbol for url construction
 pub fn select_symbol(tag: &str) -> String {
-       let symbol =  match tag {
-            "confirmed_reward" | "unconfirmed_reward" |  "estimated_reward" | "all_time_reward" => String::from("?sym=bitcoin"),
-            "off_workers" => String::from("?pair=ASIC/UP"),
-            "ok_workers" => String::from("?pair=ASIC/UP"),
-            "hash_rate_5m" | "hash_rate_60m" |  "hash_rate_24h" | "hash_rate_scoring" => String::from("?pair=TH/S"),
-            _ => String::from("?sym=bitcoin"),
-        };
-        return symbol 
-
+    let symbol = match tag {
+        "confirmed_reward" | "unconfirmed_reward" | "estimated_reward" | "all_time_reward" => {
+            String::from("?sym=bitcoin")
+        }
+        "off_workers" => String::from("?pair=ASIC/DOWN"),
+        "ok_workers" => String::from("?pair=ASIC/UP"),
+        "hash_rate_5m" | "hash_rate_60m" | "hash_rate_24h" | "hash_rate_scoring" => {
+            String::from("?pair=TH/S")
+        }
+        _ => String::from("?sym=bitcoin"),
+    };
+    return symbol;
 }
+
+ pub fn select_tiny_text(tag: &str) -> String {
+    todo!()
+ }
 
 // takes a tag matches on appropriate value in struct
 // returns its f64 value after making a request to slushpool api
-pub async fn get_slushpool_stats(tag: String) -> Result<f64, Box<dyn Error>> {
-    let stats = make_request::make_request()
-        .await?;
+pub async fn get_slushpool_stats(tag: &str) -> Result<f64, Box<dyn Error>> {
+    let stats = make_request::make_request().await?;
 
-    println!("stats IS: {:?}", stats);
-
+    // return f64 value of selected tag - Strings are converted to floats. 
     let to_float = match tag.as_ref() {
         "confirmed_reward" => stats.btc.confirmed_reward.parse::<f64>(),
         "unconfirmed_reward" => stats.btc.unconfirmed_reward.parse::<f64>(),
@@ -79,39 +90,37 @@ pub async fn get_slushpool_stats(tag: String) -> Result<f64, Box<dyn Error>> {
 
 pub async fn send_to_blockclock(url: String) -> Result<Response, Box<dyn Error>> {
     let block_client = build_client::create_client();
-    let dispatch_to_blockclock = block_client?
-        .get(url)
-        .send()
-        .await?;
-    
+    let dispatch_to_blockclock = block_client?.get(url).send().await?;
+
     Ok(dispatch_to_blockclock)
 }
 
-pub async fn slush_tags_url(tag: String, query: String) -> String {
-    println!("TAG IS: {}", tag);
-    println!("query IS: {}", query);
-    
-    // need to better error handling for unwrap here. 
-    let result = get_slushpool_stats(tag)
-        .await
-        .unwrap()
-        .to_string();
+pub async fn create_slush_url(tag: String, mut query: String) -> String {
+    // need to better error handling for unwrap here.
+    let result = get_slushpool_stats(&tag).await.unwrap().to_string();
 
-    // add logic to properly format hash rate values from GH/s to TH/s divide by 1000
-    // should handle all this within this function for now.
+    let mut result_splice = String::new();
 
-    println!("result IS: {:?}", result);
+    if tag.contains("hash") {
+        let hash_value = result[0..7].to_string();
+        let hash_formatted = hash_value.parse::<f64>().unwrap() / 1000.0;
+        result_splice = hash_formatted.round().to_string();
+    } else if tag.contains("reward") {
+        // may want to fix this to return less values, scientific notation
+        // kicks in at 5 decimal points. 
+        result_splice = result[0..7].to_string();
+    } else if tag.contains("worker") {
+        result_splice = result;
+    } else {
+        result_splice = "0".to_string();
+        query = "?pair=N/A".to_string();
+    }
 
-    let result_splice = &result[0..7]; 
-    println!("new string  IS: {}", result_splice);
-
-    let url = URL::new_slush_url("/api/show/number/", result_splice.to_string(), query).build_url();
-    println!("THE URL IS {}", url);
-    return url
+    let url = URL::new_url("/api/show/number/", result_splice.to_string(), query).build_url();
+    return url;
 }
 
-pub async fn clock_tags_url(result: String, query: String) -> String {
-    let url = URL::new_blockclock_url("/api/pick/", result, query).build_blockclock_url();
-    println!("THE URL IS {}", url);
-    return url
+pub async fn create_blockclock_url(result: String, query: String) -> String {
+    let url = URL::new_url("/api/pick/", result, query).build_blockclock_url();
+    return url;
 }

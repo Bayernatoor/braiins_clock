@@ -1,14 +1,14 @@
 use crate::client::build_client;
-use std::{error::Error, fmt::Debug};
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use std::num::ParseFloatError;
+use std::{error::Error, fmt::Debug};
 
 const SLUSH_POOL_URL: &str = "https://pool.braiins.com/accounts/profile/json/btc/";
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Stats {
-   pub username: String,
-   pub btc: Btc, 
+    pub username: String,
+    pub btc: Btc,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -30,7 +30,6 @@ pub struct Btc {
 }
 
 impl Btc {
-    
     fn to_float(&self) -> Result<f64, ParseFloatError> {
         return self.all_time_reward.parse::<f64>();
     }
@@ -39,14 +38,9 @@ impl Btc {
 pub async fn make_request() -> Result<Stats, Box<dyn Error>> {
     let client = build_client::create_client();
 
-    let response = client?
-        .get(SLUSH_POOL_URL)
-        .send()
-        .await?;
-    
-    let stats = response
-        .json::<Stats>()
-        .await?;
-  
+    let response = client?.get(SLUSH_POOL_URL).send().await?;
+
+    let stats = response.json::<Stats>().await?;
+
     Ok(stats)
-} 
+}
