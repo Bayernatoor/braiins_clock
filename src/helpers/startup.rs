@@ -1,6 +1,11 @@
 use std::collections::HashMap;
-use std::fmt::Debug;
 use std::{error::Error, io};
+use std::env; 
+
+pub fn ensure_keys_set() -> () {
+    todo!()
+ }
+
 
 pub fn introduction() -> String {
     let intro_text: String = String::from(" 

@@ -1,6 +1,5 @@
 use crate::client::build_client;
 use serde::{Deserialize, Serialize};
-use std::num::ParseFloatError;
 use std::{error::Error, fmt::Debug};
 
 const SLUSH_POOL_URL: &str = "https://pool.braiins.com/accounts/profile/json/btc/";
@@ -27,12 +26,6 @@ pub struct Btc {
     pub off_workers: f64,
     pub ok_workers: f64,
     pub dis_workers: f64,
-}
-
-impl Btc {
-    fn to_float(&self) -> Result<f64, ParseFloatError> {
-        return self.all_time_reward.parse::<f64>();
-    }
 }
 
 pub async fn make_request() -> Result<Stats, Box<dyn Error>> {

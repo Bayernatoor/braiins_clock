@@ -2,14 +2,13 @@ use reqwest::Response;
 
 use crate::client::build_client;
 use crate::requests::make_request;
+use crate::helpers::set_env_vars::set_env_vars;
 use std::{error::Error, fmt::Debug};
-
-const BLOCKCLOCK_IP: &str = "<YOUR_BLOCKCLOCK_IP_ADDRESS>";
 
 #[derive(Debug)]
 pub struct URL<'a> {
     protocol: &'a str,
-    domain: &'a str,
+    domain: String,
     path: &'a str,
     result: String,
     query: String,
@@ -17,9 +16,10 @@ pub struct URL<'a> {
 
 impl<'a> URL<'a> {
     fn new_url(path: &'a str, result: String, query: String) -> URL<'a> {
+        let blockclock_ip = set_env_vars("BLOCKCLOCK_IP");
         URL {
             protocol: "http://",
-            domain: { BLOCKCLOCK_IP },
+            domain: { blockclock_ip },
             path,
             result,
             query,

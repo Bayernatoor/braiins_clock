@@ -4,6 +4,8 @@ use std::thread;
 use std::time::Duration;
 
 pub async fn program_loop() -> () {
+    //startup::set_slush_key();
+
     let mut tags = startup::select_tags();
 
     let refresh_rate = startup::refresh_rate();
@@ -29,6 +31,8 @@ pub async fn program_loop() -> () {
         let request = requests::send_to_blockclock::send_to_blockclock(url_to_send).await;
         
         //match request.unwrap_or_else
+
+        println!("RESPONSE {:?}", request);
         
         println!("\nCurrently Displaying: {}\n", active_tag);
 
