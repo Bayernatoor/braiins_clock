@@ -1,2 +1,2 @@
 # braiins_clock
-CLI tool to display your stats from pool.braiins.com 
+CLI tool to display your stats from pool.braiins.com on your blockclock
