@@ -2,7 +2,7 @@ use reqwest::Response;
 
 use crate::client::build_client;
 use crate::requests::make_request;
-use crate::helpers::set_env_vars::set_env_vars;
+use crate::helpers::env_vars::load_env_vars;
 use std::{error::Error, fmt::Debug};
 
 #[derive(Debug)]
@@ -16,7 +16,7 @@ pub struct URL<'a> {
 
 impl<'a> URL<'a> {
     fn new_url(path: &'a str, result: String, query: String) -> URL<'a> {
-        let blockclock_ip = set_env_vars("BLOCKCLOCK_IP");
+        let blockclock_ip = load_env_vars("BLOCKCLOCK_IP");
         URL {
             protocol: "http://",
             domain: { blockclock_ip },
@@ -57,7 +57,7 @@ pub fn select_symbol(tag: &str) -> String {
     return symbol;
 }
 
- pub fn select_tiny_text(tag: &str) -> String {
+ pub fn select_tiny_text(_tag: &str) -> String {
     todo!()
  }
 

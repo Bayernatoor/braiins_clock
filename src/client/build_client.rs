@@ -1,12 +1,11 @@
-use std::env;
 use std::error::Error;
 use reqwest::{header, Client};
-use crate::helpers::set_env_vars::set_env_vars;
+use crate::helpers::env_vars::load_env_vars;
 
 const HEADERS: &str = "SlushPool-Auth-Token";
 
 pub fn create_client() -> Result<Client, Box<dyn Error>>{
-    let slushpool_api_key = set_env_vars("SLUSHPOOL_API_KEY");
+    let slushpool_api_key = load_env_vars("SLUSHPOOL_API_KEY");
 
     let mut headers = header::HeaderMap::new();
     headers.insert(
