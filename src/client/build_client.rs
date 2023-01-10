@@ -4,7 +4,7 @@ use crate::helpers::env_vars::load_env_vars;
 
 const HEADERS: &str = "SlushPool-Auth-Token";
 
-pub fn create_client() -> Result<Client, Box<dyn Error>>{
+pub async fn create_client() -> Result<Client, Box<dyn Error>>{
     let slushpool_api_key = load_env_vars("SLUSHPOOL_API_KEY");
 
     let mut headers = header::HeaderMap::new();

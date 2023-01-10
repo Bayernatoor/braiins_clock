@@ -29,9 +29,9 @@ pub struct Btc {
 }
 
 pub async fn make_request() -> Result<Stats, Box<dyn Error>> {
-    let client = build_client::create_client();
+    let client = build_client::create_client().await?;
 
-    let response = client?.get(SLUSH_POOL_URL).send().await?;
+    let response = client.get(SLUSH_POOL_URL).send().await?;
 
     let stats = response.json::<Stats>().await?;
 
