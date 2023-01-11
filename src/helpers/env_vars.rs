@@ -17,15 +17,17 @@ pub fn load_env_vars(var: &str) -> String {
 pub fn check_env_var_exists() -> bool {
     dotenv().ok(); 
     let keys =  ["SLUSHPOOL_API_KEY", "BLOCKCLOCK_IP"];
+    let mut is_set = false; 
     for key in &keys {
         if let Ok(_val) = env::var(key) {
             println!("Key: {}, is set", key);
+            is_set = true;
         } else {
             println!("{}, is NOT set", key);
-            set_env_vars();
+            return false;
         };
     };
-    return true 
+    return is_set; 
 }
 
 pub fn set_env_vars() -> () {

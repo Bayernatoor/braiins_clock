@@ -2,6 +2,7 @@ use crate::helpers::startup;
 use crate::requests::{self, send_to_blockclock::*};
 use std::thread;
 use std::time::Duration;
+use hyper;
 
 pub async fn program_loop() -> () {
     let mut tags = startup::select_tags();
@@ -27,10 +28,23 @@ pub async fn program_loop() -> () {
         };
         
         let request = requests::send_to_blockclock::send_to_blockclock(url_to_send).await;
-        
-        match request.unwrap_or_else();
+        match request {
+            Ok(response) => {
+                println!("Request successfully processed: {:?}:", response);
+            }
+            Err(error) => {
+                if let Some(hyper_error) = error.downcast_ref::<hyper::Error>() { 
+                    continue;
+                } else {
+                    println!("Error while dispatching to blocklock, you may want to check your clock's IP address: {}", error);
+                    println!("\nTrying again in 10 seconds");
+                    thread::sleep(Duration::new(10, 0));
+                    continue;
+                }
+            }
+        };
 
-        println!("RESPONSE {:?}", request);
+        //println!("RESPONSE {:?}", request);
         
         println!("\nCurrently Displaying: {}\n", active_tag);
 

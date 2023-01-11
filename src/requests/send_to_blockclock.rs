@@ -90,19 +90,23 @@ pub async fn get_slushpool_stats(tag: &str) -> Result<f64, Box<dyn Error>> {
 
 pub async fn send_to_blockclock(url: String) -> Result<Response, Box<dyn Error>> {
     loop {
-        let block_client = build_client::create_client().await?;
-        match block_client {
-            Ok(Response) => {
-                let dispatch_to_blockclock = block_client.get(url).send().await?;
+        let client = build_client::create_client().await;
+        match client {
+            Ok(response) => {
+                let dispatch_to_blockclock = response.get(url).send().await?;
                 return Ok(dispatch_to_blockclock);
             }
             Err(error) => {
                 if let Some(hyper_error) = error.downcast_ref::<hyper::Error>() { 
                     continue;
-                    }
-            };
+                } else {
+                    println!("Error while dispatch to blocklock {}: ", error);
+                    continue;
+                }
+            }
+        };
+
     }
-                
 }
 
 pub async fn create_slush_url(tag: String, mut query: String) -> String {
