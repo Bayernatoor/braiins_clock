@@ -4,6 +4,9 @@ use std::{error::Error, fmt::Debug};
 
 const SLUSH_POOL_URL: &str = "https://pool.braiins.com/accounts/profile/json/btc/";
 
+//struct representing the response value from slushpool api - json response.
+//unlikely to be the correct way to do this. if slushpools response changes this
+// will break 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Stats {
     pub username: String,
@@ -28,6 +31,7 @@ pub struct Btc {
     pub dis_workers: f64,
 }
 
+//makes a GET request to slushpool's api and returns a Struct<Stats> Result. 
 pub async fn make_request() -> Result<Stats, Box<dyn Error>> {
     let client = build_client::create_client().await?;
 

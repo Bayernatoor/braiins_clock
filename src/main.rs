@@ -13,14 +13,14 @@ use crate::run::program_loop;
 #[tokio::main]
 async fn main() -> () {
     let mut env_vars = helpers::env_vars::check_env_var_exists();
-    println!("VARS in MAIN ARE: {}", env_vars);
+    println!("VARS in MAIN ARE: {env_vars}");
     loop {
         if env_vars {
             println!("LETS GO!");
             let intro_text = startup::introduction();
-            println!("{}", intro_text);
-            
-            // handle potential errors - status codes 
+            println!("{intro_text}");
+
+            // handle potential errors - status codes
             program_loop::program_loop().await;
         } else {
             println!("Let's set those vars");
@@ -30,4 +30,3 @@ async fn main() -> () {
         }
     }
 }
-

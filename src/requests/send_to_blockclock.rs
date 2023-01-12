@@ -1,10 +1,11 @@
 use reqwest::Response;
 
 use crate::client::build_client;
-use crate::requests::make_request;
 use crate::helpers::env_vars::load_env_vars;
+use crate::requests::make_request;
 use std::{error::Error, fmt::Debug};
 
+// struct to represent an URL
 #[derive(Debug)]
 pub struct URL<'a> {
     protocol: &'a str,
@@ -15,6 +16,8 @@ pub struct URL<'a> {
 }
 
 impl<'a> URL<'a> {
+    // creates an instance of Struct URL with some pre set values 
+    // requires 3 vars as well. 
     fn new_url(path: &'a str, result: String, query: String) -> URL<'a> {
         let blockclock_ip = load_env_vars("BLOCKCLOCK_IP");
         URL {
@@ -26,6 +29,7 @@ impl<'a> URL<'a> {
         }
     }
 
+    // use format! macro to build the URL into a String type
     fn build_url(&self) -> String {
         return format!(
             "{}{}{}{}{}",
@@ -33,6 +37,7 @@ impl<'a> URL<'a> {
         );
     }
 
+    // use format! macro to build the URL into a String type - does not take query param. 
     fn build_blockclock_url(&self) -> String {
         return format!(
             "{}{}{}{}",
@@ -57,16 +62,17 @@ pub fn select_symbol(tag: &str) -> String {
     return symbol;
 }
 
- pub fn select_tiny_text(_tag: &str) -> String {
+pub fn select_tiny_text(_tag: &str) -> String {
     todo!()
- }
+}
 
 // takes a tag matches on appropriate value in struct
 // returns its f64 value after making a request to slushpool api
 pub async fn get_slushpool_stats(tag: &str) -> Result<f64, Box<dyn Error>> {
+    // Handle potential errors
     let stats = make_request::make_request().await?;
 
-    // return f64 value of selected tag - Strings are converted to floats. 
+    // return f64 value of selected tag - Strings are converted to floats.
     let to_float = match tag.as_ref() {
         "confirmed_reward" => stats.btc.confirmed_reward.parse::<f64>(),
         "unconfirmed_reward" => stats.btc.unconfirmed_reward.parse::<f64>(),
@@ -88,44 +94,63 @@ pub async fn get_slushpool_stats(tag: &str) -> Result<f64, Box<dyn Error>> {
     Ok(to_float?)
 }
 
+/*
+Instantiates a reqwest client and takes a URL as parameter 
+to make GET request to blocklock. 
+*/
 pub async fn send_to_blockclock(url: String) -> Result<Response, Box<dyn Error>> {
     loop {
         let client = build_client::create_client().await;
         match client {
-            Ok(response) => {
-                let dispatch_to_blockclock = response.get(url).send().await?;
+            Ok(client) => {
+                // if no errors with client return a Result with OK value to caller. 
+                let dispatch_to_blockclock = client.get(url).send().await?;
                 return Ok(dispatch_to_blockclock);
             }
+            //Any error we handle by trying again
+            //this needs work
             Err(error) => {
-                if let Some(hyper_error) = error.downcast_ref::<hyper::Error>() { 
+                if let Some(_hyper_error) = error.downcast_ref::<hyper::Error>() {
                     continue;
                 } else {
-                    println!("Error while dispatch to blocklock {}: ", error);
+                    eprintln!("Error while creating client: {error}");
+                    println!("Trying again...please standby");
                     continue;
                 }
             }
         };
-
     }
 }
 
+// Build the slushpool url String
+// Also formats the values used in the URL query portion to ensure they
+// look good on blockclock. - may split this off into it's func later. 
 pub async fn create_slush_url(tag: String, mut query: String) -> String {
-    // need to better error handling for unwrap here.
-    let result = get_slushpool_stats(&tag).await.unwrap().to_string();
+    let result = match get_slushpool_stats(&tag).await {
+        Ok(result) => result.to_string(),
+        Err(_error) => {
+            eprintln!("Error parsing result, defaulting to 0");
+            "0".to_string()
+        }
+    };
+
+    println!("RESULT from create_slush_url {result}");
 
     let mut result_splice = String::new();
 
     if tag.contains("hash") {
         let hash_value = result[0..7].to_string();
+        // formatted to represent terahash/second. 
         let hash_formatted = hash_value.parse::<f64>().unwrap() / 1000.0;
         result_splice = hash_formatted.round().to_string();
     } else if tag.contains("reward") {
-        // may want to fix this to return less values, scientific notation
-        // kicks in at 5 decimal points. 
+        // may want to fix this to return less decimals,
+        // scientific notation kicks in at 5 decimal points.
         result_splice = result[0..7].to_string();
     } else if tag.contains("worker") {
         result_splice = result;
     } else {
+        // any error will display 0 
         result_splice = "0".to_string();
         query = "?pair=N/A".to_string();
     }
@@ -134,6 +159,7 @@ pub async fn create_slush_url(tag: String, mut query: String) -> String {
     return url;
 }
 
+// blockclock url is simple since it handles all tiny text and decoration itself. 
 pub async fn create_blockclock_url(result: String, query: String) -> String {
     let url = URL::new_url("/api/pick/", result, query).build_blockclock_url();
     return url;
