@@ -4,7 +4,6 @@ use hyper;
 use std::thread;
 use std::time::Duration;
 
-
 // loops through user selected tags and is responsbile for calling all helper functions
 // Engine that runs the program. Called in main. 
 pub async fn program_loop() -> () {
@@ -39,8 +38,8 @@ pub async fn program_loop() -> () {
         // makes a GET request to the blockclock with the appropriate url. 
         let request = requests::send_to_blockclock::send_to_blockclock(url_to_send).await;
         match request {
-            Ok(response) => {
-                println!("Blockblock received request successfully: {:?}:", response);
+            Ok(_response) => {
+                //println!("Blockblock received request successfully: {:?}:", response);
             }
             Err(error) => {
                 if let Some(_hyper_error) = error.downcast_ref::<hyper::Error>() {
@@ -54,10 +53,10 @@ pub async fn program_loop() -> () {
             }
         };
 
-        println!("Currently Displaying: {active_tag}\n");
+        //println!("Currently Displaying: {active_tag}\n");
         // refresh rate of display is used to set thread::sleep() 
         let sleep_time = refresh_rate.as_ref().unwrap() * 60;
-        println!("Sleeping for {} minutes", sleep_time / 60);
+        println!("\nNext tag will be displayed in {} minutes", sleep_time / 60);
         thread::sleep(Duration::new(sleep_time as u64, 0));
     }
 }

@@ -5,7 +5,7 @@ use crate::helpers::env_vars::load_env_vars;
 use crate::requests::make_request;
 use std::{error::Error, fmt::Debug};
 
-// struct to represent an URL
+// struct to represent a URL
 #[derive(Debug)]
 pub struct URL<'a> {
     protocol: &'a str,
@@ -66,7 +66,7 @@ pub fn select_tiny_text(_tag: &str) -> String {
     todo!()
 }
 
-// takes a tag matches on appropriate value in struct
+// takes a tag matches on appropriate value in struct 
 // returns its f64 value after making a request to slushpool api
 pub async fn get_slushpool_stats(tag: &str) -> Result<f64, Box<dyn Error>> {
     // Handle potential errors
@@ -94,10 +94,11 @@ pub async fn get_slushpool_stats(tag: &str) -> Result<f64, Box<dyn Error>> {
     Ok(to_float?)
 }
 
-/*
-Instantiates a reqwest client and takes a URL as parameter 
-to make GET request to blocklock. 
-*/
+/// Returns a Result which contains a URL struct if Ok or the Error.  
+/// 
+/// # Arguments 
+///
+/// * `url` - A URL struct of type String
 pub async fn send_to_blockclock(url: String) -> Result<Response, Box<dyn Error>> {
     loop {
         let client = build_client::create_client().await;
@@ -122,19 +123,22 @@ pub async fn send_to_blockclock(url: String) -> Result<Response, Box<dyn Error>>
     }
 }
 
-// Build the slushpool url String
-// Also formats the values used in the URL query portion to ensure they
-// look good on blockclock. - may split this off into it's func later. 
+/// Returns a String representing the URL used to display a slushpool tag.
+/// Function also formats the query(value) so as to properly display it on the clock. 
+///
+/// # Arguments
+///
+/// * `tag` - A string representing the selected tag to display.
+/// * `query` - The value being used as part of the URL
+///
 pub async fn create_slush_url(tag: String, mut query: String) -> String {
     let result = match get_slushpool_stats(&tag).await {
         Ok(result) => result.to_string(),
         Err(_error) => {
-            eprintln!("Error parsing result, defaulting to 0");
+            eprintln!("Error parsing result, defaulting to 0, until next refresh");
             "0".to_string()
         }
     };
-
-    println!("RESULT from create_slush_url {result}");
 
     let mut result_splice = String::new();
 
@@ -154,13 +158,19 @@ pub async fn create_slush_url(tag: String, mut query: String) -> String {
         result_splice = "0".to_string();
         query = "?pair=N/A".to_string();
     }
+    println!("Tag Displayed: {tag}\nValue: {result_splice}");
 
     let url = URL::new_url("/api/show/number/", result_splice.to_string(), query).build_url();
     return url;
 }
 
-// blockclock url is simple since it handles all tiny text and decoration itself. 
-pub async fn create_blockclock_url(result: String, query: String) -> String {
-    let url = URL::new_url("/api/pick/", result, query).build_blockclock_url();
+/// Returns a String representing a url that is then past to the blockclock
+/// # Arguments
+///
+/// * `tag` - A string representing the selected tag to display.
+/// * `query` - Always None in this case, typically represents the value displayed
+pub async fn create_blockclock_url(tag: String, query: String) -> String {
+    println!("Tag Displayed: {tag}");
+    let url = URL::new_url("/api/pick/", tag, query).build_blockclock_url();
     return url;
 }
