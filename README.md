@@ -1,6 +1,6 @@
-# BRAIINS CLOCK
+# BRAIIN CLOCK
 
-A CLI tool that allows you to broadcast current slushpool bitcoin mining info from your user profile directly to your BlockClock Mini (https://blockclockmini.com/)
+A Linux CLI tool that allows you to broadcast current slushpool bitcoin mining info from your user profile directly to your BlockClock Mini (https://blockclockmini.com/)
 
 ![thsblockclock](https://user-images.githubusercontent.com/55212954/158614788-8b850940-fb42-4c6b-ae84-7055e81db1b9.jpg)
 
@@ -60,3 +60,29 @@ https://slushpool.com/login/
    Finally, click on **Create Access Profile**.
 
 **Keep that IP address and Auth Token handy. You'll be asked to enter those on startup**
+
+## Installation
+
+The binary for braiin clock is braiin_clock 
+
+Currently the only way to install the binary is with cargo. This can easily for achieved on Linux with the following commands:
+
+```curl --proto '=https' --tlsv1.3 https://sh.rustup.rs -sSf | sh``` 
+
+Now to install the binary: 
+
+```cargo install braiin_clock```
+
+## Running the binary
+
+Open a terminal and enter: ```braiin_clock```
+
+The programm will start. 
+
+This is a work in progress and their may be bugs, please open an issue if you run into any. Thank you :D 
+
+
+
+
+
+
