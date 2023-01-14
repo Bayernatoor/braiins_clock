@@ -1,3 +1,4 @@
+#![allow(unused_assignments)]
 use reqwest::Response;
 
 use crate::client::build_client;
@@ -5,9 +6,9 @@ use crate::helpers::env_vars::load_env_vars;
 use crate::requests::make_request;
 use std::{error::Error, fmt::Debug};
 
-// struct to represent a URL
+// struct to represent a Url
 #[derive(Debug)]
-pub struct URL<'a> {
+pub struct Url<'a> {
     protocol: &'a str,
     domain: String,
     path: &'a str,
@@ -15,12 +16,12 @@ pub struct URL<'a> {
     query: String,
 }
 
-impl<'a> URL<'a> {
-    // creates an instance of Struct URL with some pre set values
+impl<'a> Url<'a> {
+    // creates an instance of Struct Url with some pre set values
     // requires 3 vars as well.
-    fn new_url(path: &'a str, result: String, query: String) -> URL<'a> {
+    fn new_url(path: &'a str, result: String, query: String) -> Url<'a> {
         let blockclock_ip = load_env_vars("BLOCKCLOCK_IP");
-        URL {
+        Url {
             protocol: "http://",
             domain: { blockclock_ip },
             path,
@@ -29,7 +30,7 @@ impl<'a> URL<'a> {
         }
     }
 
-    // use format! macro to build the URL into a String type
+    // use format! macro to build the Url into a String type
     fn build_url(&self) -> String {
         return format!(
             "{}{}{}{}{}",
@@ -37,7 +38,7 @@ impl<'a> URL<'a> {
         );
     }
 
-    // use format! macro to build the URL into a String type - does not take query param.
+    // use format! macro to build the Url into a String type - does not take query param.
     fn build_blockclock_url(&self) -> String {
         return format!(
             "{}{}{}{}",
@@ -73,7 +74,7 @@ pub async fn get_slushpool_stats(tag: &str) -> Result<f64, Box<dyn Error>> {
     let stats = make_request::make_request().await?;
 
     // return f64 value of selected tag - Strings are converted to floats.
-    let to_float = match tag.as_ref() {
+    let to_float = match tag {
         "confirmed_reward" => stats.btc.confirmed_reward.parse::<f64>(),
         "unconfirmed_reward" => stats.btc.unconfirmed_reward.parse::<f64>(),
         "estimated_reward" => stats.btc.estimated_reward.parse::<f64>(),
@@ -94,11 +95,11 @@ pub async fn get_slushpool_stats(tag: &str) -> Result<f64, Box<dyn Error>> {
     Ok(to_float?)
 }
 
-/// Returns a Result which contains a URL struct if Ok or the Error.  
+/// Returns a Result which contains a Url struct if Ok or the Error.  
 ///
 /// # Arguments
 ///
-/// * `url` - A URL struct of type String
+/// * `url` - A Url struct of type String
 pub async fn send_to_blockclock(url: String) -> Result<Response, Box<dyn Error>> {
     loop {
         let client = build_client::create_client().await;
@@ -123,13 +124,13 @@ pub async fn send_to_blockclock(url: String) -> Result<Response, Box<dyn Error>>
     }
 }
 
-/// Returns a String representing the URL used to display a slushpool tag.
+/// Returns a String representing the Url used to display a slushpool tag.
 /// Function also formats the query(value) so as to properly display it on the clock.
 ///
 /// # Arguments
 ///
 /// * `tag` - A string representing the selected tag to display.
-/// * `query` - The value being used as part of the URL
+/// * `query` - The value being used as part of the Url
 ///
 pub async fn create_slush_url(tag: String, mut query: String) -> String {
     let result = match get_slushpool_stats(&tag).await {
@@ -160,7 +161,7 @@ pub async fn create_slush_url(tag: String, mut query: String) -> String {
     }
     println!("Tag Displayed: {tag}\nValue: {result_splice}");
 
-    let url = URL::new_url("/api/show/number/", result_splice.to_string(), query).build_url();
+    let url = Url::new_url("/api/show/number/", result_splice, query).build_url();
     return url;
 }
 
@@ -171,6 +172,6 @@ pub async fn create_slush_url(tag: String, mut query: String) -> String {
 /// * `query` - Always None in this case, typically represents the value displayed
 pub async fn create_blockclock_url(tag: String, query: String) -> String {
     println!("Tag Displayed: {tag}");
-    let url = URL::new_url("/api/pick/", tag, query).build_blockclock_url();
+    let url = Url::new_url("/api/pick/", tag, query).build_blockclock_url();
     return url;
 }

@@ -36,7 +36,7 @@ pub fn check_env_var_exists() -> bool {
 }
 
 // prompts user to enter values for environment variables.
-pub fn set_env_vars() -> () {
+pub fn set_env_vars() {
     let keys = ["SLUSHPOOL_API_KEY", "BLOCKCLOCK_IP"];
     for key in &keys {
         println!("Please enter the value for {key}: ");

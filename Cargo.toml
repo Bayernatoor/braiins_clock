@@ -15,5 +15,5 @@ openssl = "0.10.44"
 dotenv = "0.15.0"
 hyper = "0.14.23"
 
-[target.x86_64.unknown-linux-gnu]
-rustflags = ["-C", "linker=clang", "-C", "link-arg=-fuse-ld=lld"]
+#[target.x86_64.unknown-linux-gnu]
+#rustflags = ["-C", "linker=clang", "-C", "link-arg=-fuse-ld=lld"]

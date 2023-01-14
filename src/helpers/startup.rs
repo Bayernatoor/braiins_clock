@@ -4,11 +4,13 @@ use std::{error::Error, io};
 // it's just an intro text!
 pub fn introduction() -> String {
     let intro_text: String = String::from(" 
+    WELCOME BITCOINER - Here's a quick intro:  
+                                          
     <---------------------------->
     Select the tags you wish to display by entering the line number and pressing enter after each entry.\n
-    The list will display all available tags. Slushpool tags and select Blockclock tags. 
-    To end the selection process enter the character q and press enter.\n
-    Tags will appear in the order selected and repeat continuously until the script is stopped (CTRL-C).
+    The list will display all available tags. Slushpool tags and certain Blockclock tags. 
+    To end the selection process enter the character \"q\" and press enter.\n
+    Tags will appear in the order selected and repeat continuously until the script is stopped, to stop press --> (CTRL-C).
     You'll also need to select the refresh rate of the blockclock display. 
     Min: 5 minutes, Max: 10080 minutes (1 week, cause why not??!).
     
@@ -42,7 +44,7 @@ pub fn refresh_rate() -> Result<i32, Box<dyn Error>> {
         loop_count += 1;
 
         if range.contains(&rate) {
-            println!("\nThe refresh rate is set to: {}mins", &rate);
+            println!("\nThe refresh rate is set to: {}mins\n", &rate);
             return Ok(rate);
         } else {
             continue;
@@ -87,7 +89,7 @@ pub fn select_tags() -> Vec<String> {
             k, v.0
         );
     }
-    println!("");
+    println!("\n");
 
     // vec returned by function - vlaues in tags HashMap
     let mut selected_tags: Vec<String> = Vec::new();
@@ -130,7 +132,7 @@ pub fn select_tags() -> Vec<String> {
         continue;
     }
     println!("The following tags will be displayed continuously, to stop press CTRL-C:");
-    println!("{:#?}", displayed_tags);
+    println!("{displayed_tags:#?}");
     println!("----------");
     return selected_tags;
 }

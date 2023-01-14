@@ -6,7 +6,7 @@ use std::time::Duration;
 
 // loops through user selected tags and is responsbile for calling all helper functions
 // Engine that runs the program. Called in main.
-pub async fn program_loop() -> () {
+pub async fn program_loop() {
     // set startup functions
     let mut tags = startup::select_tags();
     let refresh_rate = startup::refresh_rate();
