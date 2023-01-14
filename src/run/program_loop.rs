@@ -5,10 +5,9 @@ use std::thread;
 use std::time::Duration;
 
 // loops through user selected tags and is responsbile for calling all helper functions
-// Engine that runs the program. Called in main. 
+// Engine that runs the program. Called in main.
 pub async fn program_loop() -> () {
-
-    // set startup functions 
+    // set startup functions
     let mut tags = startup::select_tags();
     let refresh_rate = startup::refresh_rate();
 
@@ -35,7 +34,7 @@ pub async fn program_loop() -> () {
             }
         };
 
-        // makes a GET request to the blockclock with the appropriate url. 
+        // makes a GET request to the blockclock with the appropriate url.
         let request = requests::send_to_blockclock::send_to_blockclock(url_to_send).await;
         match request {
             Ok(_response) => {
@@ -54,9 +53,12 @@ pub async fn program_loop() -> () {
         };
 
         //println!("Currently Displaying: {active_tag}\n");
-        // refresh rate of display is used to set thread::sleep() 
+        // refresh rate of display is used to set thread::sleep()
         let sleep_time = refresh_rate.as_ref().unwrap() * 60;
-        println!("\nNext tag will be displayed in {} minutes", sleep_time / 60);
+        println!(
+            "\nNext tag will be displayed in {} minutes",
+            sleep_time / 60
+        );
         thread::sleep(Duration::new(sleep_time as u64, 0));
     }
 }

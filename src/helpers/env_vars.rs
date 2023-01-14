@@ -5,7 +5,7 @@ use std::{env, fs, io, io::Write};
 
 /*
 var supplied as parameter is matched against exisiting env var and value is
-returned to the caller if there's a match. 
+returned to the caller if there's a match.
 */
 pub fn load_env_vars(var: &str) -> String {
     dotenv().ok();
@@ -35,7 +35,7 @@ pub fn check_env_var_exists() -> bool {
     return is_set;
 }
 
-// prompts user to enter values for environment variables. 
+// prompts user to enter values for environment variables.
 pub fn set_env_vars() -> () {
     let keys = ["SLUSHPOOL_API_KEY", "BLOCKCLOCK_IP"];
     for key in &keys {
@@ -49,7 +49,7 @@ pub fn set_env_vars() -> () {
         let value = format!("{key}={result}\n");
         let value_to_bytes = value.into_bytes();
 
-        // appends value to exisiting .env or creates it if necessary 
+        // appends value to exisiting .env or creates it if necessary
         let mut file = match fs::OpenOptions::new().append(true).create(true).open(path) {
             Ok(file) => file,
             Err(e) => {
@@ -58,7 +58,7 @@ pub fn set_env_vars() -> () {
             }
         };
 
-        // attempts to write value to file. 
+        // attempts to write value to file.
         if let Err(e) = file.write_all(&value_to_bytes) {
             println!("There was an error writing to the file {e}");
         } else {

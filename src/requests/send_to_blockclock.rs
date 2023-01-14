@@ -16,8 +16,8 @@ pub struct URL<'a> {
 }
 
 impl<'a> URL<'a> {
-    // creates an instance of Struct URL with some pre set values 
-    // requires 3 vars as well. 
+    // creates an instance of Struct URL with some pre set values
+    // requires 3 vars as well.
     fn new_url(path: &'a str, result: String, query: String) -> URL<'a> {
         let blockclock_ip = load_env_vars("BLOCKCLOCK_IP");
         URL {
@@ -37,7 +37,7 @@ impl<'a> URL<'a> {
         );
     }
 
-    // use format! macro to build the URL into a String type - does not take query param. 
+    // use format! macro to build the URL into a String type - does not take query param.
     fn build_blockclock_url(&self) -> String {
         return format!(
             "{}{}{}{}",
@@ -66,7 +66,7 @@ pub fn select_tiny_text(_tag: &str) -> String {
     todo!()
 }
 
-// takes a tag matches on appropriate value in struct 
+// takes a tag matches on appropriate value in struct
 // returns its f64 value after making a request to slushpool api
 pub async fn get_slushpool_stats(tag: &str) -> Result<f64, Box<dyn Error>> {
     // Handle potential errors
@@ -95,8 +95,8 @@ pub async fn get_slushpool_stats(tag: &str) -> Result<f64, Box<dyn Error>> {
 }
 
 /// Returns a Result which contains a URL struct if Ok or the Error.  
-/// 
-/// # Arguments 
+///
+/// # Arguments
 ///
 /// * `url` - A URL struct of type String
 pub async fn send_to_blockclock(url: String) -> Result<Response, Box<dyn Error>> {
@@ -104,7 +104,7 @@ pub async fn send_to_blockclock(url: String) -> Result<Response, Box<dyn Error>>
         let client = build_client::create_client().await;
         match client {
             Ok(client) => {
-                // if no errors with client return a Result with OK value to caller. 
+                // if no errors with client return a Result with OK value to caller.
                 let dispatch_to_blockclock = client.get(url).send().await?;
                 return Ok(dispatch_to_blockclock);
             }
@@ -124,7 +124,7 @@ pub async fn send_to_blockclock(url: String) -> Result<Response, Box<dyn Error>>
 }
 
 /// Returns a String representing the URL used to display a slushpool tag.
-/// Function also formats the query(value) so as to properly display it on the clock. 
+/// Function also formats the query(value) so as to properly display it on the clock.
 ///
 /// # Arguments
 ///
@@ -144,7 +144,7 @@ pub async fn create_slush_url(tag: String, mut query: String) -> String {
 
     if tag.contains("hash") {
         let hash_value = result[0..7].to_string();
-        // formatted to represent terahash/second. 
+        // formatted to represent terahash/second.
         let hash_formatted = hash_value.parse::<f64>().unwrap() / 1000.0;
         result_splice = hash_formatted.round().to_string();
     } else if tag.contains("reward") {
@@ -154,7 +154,7 @@ pub async fn create_slush_url(tag: String, mut query: String) -> String {
     } else if tag.contains("worker") {
         result_splice = result;
     } else {
-        // any error will display 0 
+        // any error will display 0
         result_splice = "0".to_string();
         query = "?pair=N/A".to_string();
     }

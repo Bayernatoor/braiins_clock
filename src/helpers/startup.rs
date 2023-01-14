@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::{error::Error, io};
 
-// it's just an intro text! 
+// it's just an intro text!
 pub fn introduction() -> String {
     let intro_text: String = String::from(" 
     <---------------------------->
@@ -18,7 +18,7 @@ pub fn introduction() -> String {
     return intro_text;
 }
 
-// Ask user for input to set refresh rate of blockclock display in minutes 
+// Ask user for input to set refresh rate of blockclock display in minutes
 pub fn refresh_rate() -> Result<i32, Box<dyn Error>> {
     println!("Please select a refresh rate -- Any number between 5-10080");
 
@@ -79,7 +79,7 @@ pub fn select_tags() -> Vec<String> {
     Please choose which tags you want to display"
     );
 
-    // displays tags to user - 0 "tag", 1 "tag", etc.. 
+    // displays tags to user - 0 "tag", 1 "tag", etc..
     for (k, v) in tags.iter().enumerate() {
         println!(
             "
@@ -91,12 +91,12 @@ pub fn select_tags() -> Vec<String> {
 
     // vec returned by function - vlaues in tags HashMap
     let mut selected_tags: Vec<String> = Vec::new();
-    // vec used to displayed tags selected by user - key in tags HashMap 
+    // vec used to displayed tags selected by user - key in tags HashMap
     let mut displayed_tags: Vec<String> = Vec::new();
     let mut selected = String::new();
 
-    // accepts int values representing the tags - runs indefnitely until user 
-    // types the character "q". 
+    // accepts int values representing the tags - runs indefnitely until user
+    // types the character "q".
     loop {
         selected.clear();
 
@@ -104,7 +104,7 @@ pub fn select_tags() -> Vec<String> {
             .read_line(&mut selected)
             .expect("Could not parse line");
 
-        // if q is entered break out of loop and continue program. 
+        // if q is entered break out of loop and continue program.
         if selected.trim() == "q" {
             println!("----------");
             break;
@@ -116,8 +116,8 @@ pub fn select_tags() -> Vec<String> {
             Err(_) => continue,
         };
 
-        // make sure the int provided corresponds to a tag 
-        // if not reject it. 
+        // make sure the int provided corresponds to a tag
+        // if not reject it.
         let valid_ints = 0..=tags.len();
         if valid_ints.contains(&selected) {
             for (k, v) in tags.iter().enumerate() {

@@ -13,7 +13,7 @@ use crate::run::program_loop;
 #[tokio::main]
 async fn main() -> () {
     // lets check if our env_vars are set if true program starts running
-    // otherwise let's ask user to set them and try again. 
+    // otherwise let's ask user to set them and try again.
     let mut env_vars = helpers::env_vars::check_env_var_exists();
     println!("VARS in MAIN ARE: {env_vars}");
     loop {
