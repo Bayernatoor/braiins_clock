@@ -1,7 +1,16 @@
 [package]
 name = "braiin_clock"
 version = "0.1.0"
+author = "Bayernator"
+license = "MIT"
+description = "A CLI tool that allows you to broadcast current slushpool bitcoin mining info from your user profile directly to your BlockClock Mini"
+readme = "README.md"
+homepage = "https://github.com/Bayernatoor/braiins_clock"
+repository = "https://github.com/Bayernatoor/braiins_clock"
+keywords = ["cli", "bitcoin", "slushpool"]
+categories = ["command-line-utilities"]
 edition = "2021"
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
