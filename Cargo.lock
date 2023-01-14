@@ -27,7 +27,6 @@ dependencies = [
  "dotenv",
  "futures",
  "hyper",
- "openssl",
  "reqwest",
  "serde",
  "serde_json",
