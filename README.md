@@ -65,24 +65,20 @@ https://slushpool.com/login/
 
 The binary for braiin clock is braiin_clock 
 
-Currently the only way to install the binary is with cargo. This can easily for achieved on Linux with the following commands:
+Currently the only way to install the binary is with cargo. This can easily for achieved on Linux with the following commands in a terminal.
+
+First install the rust toolchain: 
 
 ```curl --proto '=https' --tlsv1.3 https://sh.rustup.rs -sSf | sh``` 
 
-Now to install the binary: 
+Now install the binary: 
 
 ```cargo install braiin_clock```
 
 ## Running the binary
 
-Open a terminal and enter: ```braiin_clock```
+Within a terminal window enter: ```braiin_clock```
 
-The programm will start. 
+The program will start. 
 
 This is a work in progress and their may be bugs, please open an issue if you run into any. Thank you :D 
-
-
-
-
-
-
