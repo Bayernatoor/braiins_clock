@@ -81,4 +81,12 @@ Within a terminal window enter: ```braiin_clock```
 
 The program will start. 
 
+## How to use
+
+You'll be asked to enter you Slushpool API Token and your clock's IP address. Make sure you enter those correctly as there is no (currently) way to change/update those yet. 
+
+Follow the instructions --> Select the tags you want to display and press "q" once you've selected your desired tags. Select the blockclock display refresh rate. If you want to change any of these settings you'll want to press CTRL+C to exit the program and start over.
+
+The Blockclock will display the tags in the selected order continuously until you exit the program, close the terminal, shutdown your computer. 
+
 This is a work in progress and their may be bugs, please open an issue if you run into any. Thank you :D 
