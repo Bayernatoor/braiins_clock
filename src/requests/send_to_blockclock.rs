@@ -4,7 +4,8 @@ use reqwest::Response;
 use crate::client::build_client;
 use crate::helpers::env_vars::load_env_vars;
 use crate::requests::make_request;
-use std::{error::Error, fmt::Debug};
+use std::{error::Error, fmt::Debug, thread};
+use std::time::Duration;
 
 // struct to represent a Url
 #[derive(Debug)]
@@ -69,30 +70,39 @@ pub fn select_tiny_text(_tag: &str) -> String {
 
 // takes a tag matches on appropriate value in struct
 // returns its f64 value after making a request to slushpool api
-pub async fn get_slushpool_stats(tag: &str) -> Result<f64, Box<dyn Error>> {
-    // Handle potential errors
-    let stats = make_request::make_request().await?;
-
-    // return f64 value of selected tag - Strings are converted to floats.
-    let to_float = match tag {
-        "confirmed_reward" => stats.btc.confirmed_reward.parse::<f64>(),
-        "unconfirmed_reward" => stats.btc.unconfirmed_reward.parse::<f64>(),
-        "estimated_reward" => stats.btc.estimated_reward.parse::<f64>(),
-        "all_time_reward" => stats.btc.all_time_reward.parse::<f64>(),
-        "hash_rate_unit" => stats.btc.hash_rate_unit.parse::<f64>(),
-        "hash_rate_5m" => Ok(stats.btc.hash_rate_5m),
-        "hash_rate_60m" => Ok(stats.btc.hash_rate_60m),
-        "hash_rate_24h" => Ok(stats.btc.hash_rate_24h),
-        "hash_rate_scoring" => Ok(stats.btc.hash_rate_scoring),
-        "hash_rate_yesterday" => Ok(stats.btc.hash_rate_yesterday),
-        "low_workers" => Ok(stats.btc.low_workers),
-        "off_workers" => Ok(stats.btc.off_workers),
-        "ok_workers" => Ok(stats.btc.ok_workers),
-        "dis_workers" => Ok(stats.btc.dis_workers),
-        _ => String::from("0.0").parse::<f64>(),
-    };
-
-    Ok(to_float?)
+pub async fn get_slushpool_stats<E>(tag: &str) -> Result<f64, Box<dyn Error>> {
+    loop {
+        let stats = make_request::make_request().await;
+        match stats {
+            Ok(stats) => {
+                // return f64 value of selected tag - Strings are converted to floats.
+                let to_float = match tag {
+                    "confirmed_reward" => stats.btc.confirmed_reward.parse::<f64>(),
+                    "unconfirmed_reward" => stats.btc.unconfirmed_reward.parse::<f64>(),
+                    "estimated_reward" => stats.btc.estimated_reward.parse::<f64>(),
+                    "all_time_reward" => stats.btc.all_time_reward.parse::<f64>(),
+                    "hash_rate_unit" => stats.btc.hash_rate_unit.parse::<f64>(),
+                    "hash_rate_5m" => Ok(stats.btc.hash_rate_5m),
+                    "hash_rate_60m" => Ok(stats.btc.hash_rate_60m),
+                    "hash_rate_24h" => Ok(stats.btc.hash_rate_24h),
+                    "hash_rate_scoring" => Ok(stats.btc.hash_rate_scoring),
+                    "hash_rate_yesterday" => Ok(stats.btc.hash_rate_yesterday),
+                    "low_workers" => Ok(stats.btc.low_workers),
+                    "off_workers" => Ok(stats.btc.off_workers),
+                    "ok_workers" => Ok(stats.btc.ok_workers),
+                    "dis_workers" => Ok(stats.btc.dis_workers),
+                    _ => String::from("0.0").parse::<f64>(),
+                };
+    
+                return Ok::<f64, Box<dyn Error>>(to_float?)
+            }
+            Err(err) => {
+                println!("Oh no we got an error: {err}.\nWill try again in 10 seconds");
+                thread::sleep(Duration::new(10, 0));
+                continue;
+            }
+        };
+    }
 }
 
 /// Returns a Result which contains a Url struct if Ok or the Error.  
@@ -133,7 +143,7 @@ pub async fn send_to_blockclock(url: String) -> Result<Response, Box<dyn Error>>
 /// * `query` - The value being used as part of the Url
 ///
 pub async fn create_slush_url(tag: String, mut query: String) -> String {
-    let result = match get_slushpool_stats(&tag).await {
+    let result = match get_slushpool_stats::<f64>(&tag).await {
         Ok(result) => result.to_string(),
         Err(_error) => {
             eprintln!("Error parsing result, defaulting to 0, until next refresh");
@@ -143,7 +153,9 @@ pub async fn create_slush_url(tag: String, mut query: String) -> String {
 
     let mut result_splice = String::new();
 
-    if tag.contains("hash") {
+    if result == "0" {
+        result_splice = "0".to_string();
+    } else if tag.contains("hash") {
         let hash_value = result[0..7].to_string();
         // formatted to represent terahash/second.
         let hash_formatted = hash_value.parse::<f64>().unwrap() / 1000.0;
