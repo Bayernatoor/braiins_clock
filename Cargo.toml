@@ -3,11 +3,11 @@ name = "braiin_clock"
 version = "0.1.2"
 author = "Bayernator"
 license = "MIT"
-description = "A CLI tool that allows you to broadcast current slushpool bitcoin mining info from your user profile directly to your BlockClock Mini"
+description = "A CLI tool that allows you to broadcast current Braiins Pool bitcoin mining info from your user profile directly to your BlockClock Mini"
 readme = "README.md"
 homepage = "https://github.com/Bayernatoor/braiins_clock"
 repository = "https://github.com/Bayernatoor/braiins_clock"
-keywords = ["cli", "bitcoin", "slushpool"]
+keywords = ["cli", "bitcoin", "slushpool", "Braiins"]
 categories = ["command-line-utilities"]
 edition = "2021"
 

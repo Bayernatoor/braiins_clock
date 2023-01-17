@@ -4,8 +4,8 @@ use reqwest::Response;
 use crate::client::build_client;
 use crate::helpers::env_vars::load_env_vars;
 use crate::requests::make_request;
-use std::{error::Error, fmt::Debug, thread};
 use std::time::Duration;
+use std::{error::Error, fmt::Debug, thread};
 
 // struct to represent a Url
 #[derive(Debug)]
@@ -93,12 +93,12 @@ pub async fn get_slushpool_stats<E>(tag: &str) -> Result<f64, Box<dyn Error>> {
                     "dis_workers" => Ok(stats.btc.dis_workers),
                     _ => String::from("0.0").parse::<f64>(),
                 };
-    
-                return Ok::<f64, Box<dyn Error>>(to_float?)
+
+                return Ok::<f64, Box<dyn Error>>(to_float?);
             }
             Err(err) => {
-                println!("Oh no we got an error: {err}.\nWill try again in 10 seconds");
-                thread::sleep(Duration::new(10, 0));
+                println!("Cannot retrieve data from Braiins Pool, check you API token: {err}.\nWill try again in 30 seconds");
+                thread::sleep(Duration::new(30, 0));
                 continue;
             }
         };

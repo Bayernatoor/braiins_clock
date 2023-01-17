@@ -8,7 +8,7 @@ pub fn introduction() -> String {
                                           
     <---------------------------->
     Select the tags you wish to display by entering the line number and pressing enter after each entry.\n
-    The list will display all available tags. Slushpool tags and certain Blockclock tags. 
+    The list will display all available tags. Braiins Pool tags and certain Blockclock tags. 
     To end the selection process enter the character \"q\" and press enter.\n
     Tags will appear in the order selected and repeat continuously until the script is stopped, to stop press --> (CTRL-C).
     You'll also need to select the refresh rate of the blockclock display. 
@@ -97,7 +97,7 @@ pub fn select_tags() -> Vec<String> {
     let mut displayed_tags: Vec<String> = Vec::new();
     let mut selected = String::new();
 
-    // accepts int values representing the tags - runs indefnitely until user
+    // accepts int values representing the tags - runs indefinitely until user
     // types the character "q".
     loop {
         selected.clear();

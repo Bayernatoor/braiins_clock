@@ -23,12 +23,13 @@ pub fn check_env_var_exists() -> bool {
     dotenv().ok();
     let keys = ["SLUSHPOOL_API_KEY", "BLOCKCLOCK_IP"];
     let mut is_set = false;
+    println!("Ensuring that environment variables are set.\n");
     for key in &keys {
         if let Ok(_val) = env::var(key) {
-            println!("Key: {key}, is set");
+            println!("{key}, is set");
             is_set = true;
         } else {
-            println!("{key}, is NOT set");
+            println!("is NOT set");
             return false;
         };
     }
@@ -65,4 +66,14 @@ pub fn set_env_vars() {
             println!("Successfully wrote to file");
         }
     }
+}
+
+pub fn reset_env_vars() {
+    let path = "./.env";
+    match fs::File::create(path) {
+        Ok(_file) => set_env_vars(),
+        Err(e) => {
+            println!("Error truncating .env file: {e}");
+        }
+    };
 }

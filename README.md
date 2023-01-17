@@ -1,6 +1,6 @@
 # BRAIIN CLOCK
 
-A Linux CLI tool that allows you to broadcast current slushpool bitcoin mining info from your user profile directly to your BlockClock Mini (https://blockclockmini.com/)
+A Linux CLI tool that allows you to broadcast current Braiins Pool bitcoin mining info from your user profile directly to your BlockClock Mini (https://blockclockmini.com/)
 
 ![thsblockclock](https://user-images.githubusercontent.com/55212954/158614788-8b850940-fb42-4c6b-ae84-7055e81db1b9.jpg)
 
@@ -32,7 +32,7 @@ A Linux CLI tool that allows you to broadcast current slushpool bitcoin mining i
 
 ## Setup:
 
-First you'll want to obtain your **Blockclock's IP** address as well as a **Slushpool Auth Token**.
+First you'll want to obtain your **Blockclock's IP** address as well as a **Braiins Auth Token**.
 
 ### Getting your Blockclock IP address:
 
@@ -46,10 +46,10 @@ You now have access to your Blockclock's settings page. On the **Display Page**,
 
 That is all! 
 
-### Getting your Slushpool Auth Token:
+### Getting your Braiins Auth Token:
 
 Login:
-https://slushpool.com/login/
+https://pool.braiins.com/login
 
 1. Click on the icon on the right of your username in the top right corner.
 2. Click on **Devices**
@@ -79,14 +79,16 @@ Now install the binary:
 
 Within a terminal window enter: ```braiin_clock```
 
+If this command does not work make sure the .cargo/ directory is on your Path.
+
 The program will start. 
 
 ## How to use
 
-You'll be asked to enter you Slushpool API Token and your clock's IP address. Make sure you enter those correctly as there is no (currently) way to change/update those yet. 
+You'll be asked to enter you Braiins API Token and your Blockclock's IP address.
 
 Follow the instructions --> Select the tags you want to display and press "q" once you've selected your desired tags. Select the blockclock display refresh rate. If you want to change any of these settings you'll want to press CTRL+C to exit the program and start over.
 
-The Blockclock will display the tags in the selected order continuously until you exit the program, close the terminal, shutdown your computer. 
+The Blockclock will display the tags in the selected order, continuously, until you exit the program, close the terminal or shutdown your computer. 
 
-This is a work in progress and their may be bugs, please open an issue if you run into any. Thank you :D 
+This is a work in progress and there may be bugs. Please open an issue if you run into any. Thank you :D 
