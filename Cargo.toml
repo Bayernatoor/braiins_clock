@@ -1,6 +1,6 @@
 [package]
 name = "braiin_clock"
-version = "0.1.2"
+version = "0.1.3"
 author = "Bayernator"
 license = "MIT"
 description = "A CLI tool that allows you to broadcast current Braiins Pool bitcoin mining info from your user profile directly to your BlockClock Mini"
