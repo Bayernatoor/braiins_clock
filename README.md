@@ -65,13 +65,17 @@ https://pool.braiins.com/login
 
 The binary for braiin clock is braiin_clock 
 
-Currently the only way to install the binary is with cargo. This can easily for achieved on Linux with the following commands in a terminal.
+Currently the only way to install the binary is with cargo. 
 
-First install the rust toolchain: 
+First install the rust toolchain - If you’re using Linux or macOS, open a terminal and enter the following command:
 
 ```curl --proto '=https' --tlsv1.3 https://sh.rustup.rs -sSf | sh``` 
 
-Now install the binary: 
+For Windows users visit: https://forge.rust-lang.org/infra/other-installation-methods.html#other-ways-to-install-rustup
+
+You'll need to download and run the rustup-init executable. 
+
+Once install you can install the binary using ```cargo install```: 
 
 ```cargo install braiin_clock```
 
@@ -79,9 +83,10 @@ Now install the binary:
 
 Within a terminal window enter: ```braiin_clock```
 
-If this command does not work make sure the .cargo/ directory is on your Path.
-
 The program will start. 
+
+*If this command does not work make sure the ```.cargo/``` directory is on your Path.*
+
 
 ## How to use
 
