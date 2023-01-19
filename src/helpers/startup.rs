@@ -1,4 +1,3 @@
-use std::collections::HashMap;
 use std::{error::Error, io};
 
 // it's just an intro text!
@@ -52,9 +51,12 @@ pub fn refresh_rate() -> Result<i32, Box<dyn Error>> {
     }
 }
 
-// display available tags to the user and add them to a Vec
+// display available tags to the user and add them to a Vector for display and
+// further use.
 pub fn select_tags() -> Vec<String> {
-    let tags = HashMap::from([
+    // vector of 2 value tuples, 0 index is pretty value used to show user
+    // index 1 is value required in URL to make calls to blocklock.
+    let tags = Vec::from([
         ("Confirmed Reward", "confirmed_reward"),
         ("Unconfirmed Reward", "unconfirmed_reward"),
         ("Estimated Reward", "estimated_reward"),
@@ -91,13 +93,14 @@ pub fn select_tags() -> Vec<String> {
     }
     println!("\n");
 
-    // vec returned by function - vlaues in tags HashMap
+    // vec returned by function - values in tags vector
     let mut selected_tags: Vec<String> = Vec::new();
-    // vec used to displayed tags selected by user - key in tags HashMap
+    // vec used to displayed tags selected by user - key in tags vector
     let mut displayed_tags: Vec<String> = Vec::new();
+
     let mut selected = String::new();
 
-    // accepts int values representing the tags - runs indefinitely until user
+    // Tag selection loop, display tag list to user - runs indefinitely until user
     // types the character "q".
     loop {
         selected.clear();
@@ -118,8 +121,9 @@ pub fn select_tags() -> Vec<String> {
             Err(_) => continue,
         };
 
-        // make sure the int provided corresponds to a tag
-        // if not reject it.
+        // make sure the integer provided corresponds to a tag if not, reject it.
+        // add valid tags to 2 Vectors "selected_tags" is vector, tags in index 1, returned by function
+        // displayed_tags is vector, tags in index 0, used to display tags to user.
         let valid_ints = 0..=tags.len();
         if valid_ints.contains(&selected) {
             for (k, v) in tags.iter().enumerate() {

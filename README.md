@@ -1,6 +1,8 @@
 # BRAIIN CLOCK
 
-A Linux CLI tool that allows you to broadcast current Braiins Pool bitcoin mining info from your user profile directly to your BlockClock Mini (https://blockclockmini.com/)
+A CLI tool that allows you to broadcast current Braiins Pool Bitcoin mining info from your user profile directly to your BlockClock Mini (https://blockclockmini.com/)
+
+Sit back and see your sats get stacked.
 
 ![thsblockclock](https://user-images.githubusercontent.com/55212954/158614788-8b850940-fb42-4c6b-ae84-7055e81db1b9.jpg)
 
@@ -34,13 +36,15 @@ A Linux CLI tool that allows you to broadcast current Braiins Pool bitcoin minin
 
 First you'll want to obtain your **Blockclock's IP** address as well as a **Braiins Auth Token**.
 
-### Getting your Blockclock IP address:
+*Also note that the computer on which you run this script will have to be on the same network as the Blockclock.*
+
+### Getting your Blockclock IP address & setup:
 
 This assume's that you have already setup your Blockclock Mini. 
 
-If you need your Blockclock's IP, press on the second button from the top on the right side of the Blockclock. You'll see an IP address, likely in the 5th square.
+If you need your Blockclock's IP, press on the second button from the top right side of the Blockclock. You'll see an IP address, likely in the 5th square.
 
-We'll need to set your blockclock to manual in order to send it GET requests. Enter your clock's IP in a browser
+NOTE: You'll need to set your Blockclock to **manual**. To do so enter your Blockclock's IP address in the URL bar of a browser.
 
 You now have access to your Blockclock's settings page. On the **Display Page**, go down to **Display Preferences**, set **Screen Update Rate** to **Manual**.
 
@@ -48,7 +52,7 @@ That is all!
 
 ### Getting your Braiins Auth Token:
 
-Login:
+Login here:
 https://pool.braiins.com/login
 
 1. Click on the icon on the right of your username in the top right corner.
@@ -63,7 +67,10 @@ https://pool.braiins.com/login
 
 ## Installation
 
-The binary for braiin clock is braiin_clock 
+The binary for braiin clock is... believe it or not, braiin_clock. 
+Once installed your enter **braiin_clock** in your terminal to run it. 
+
+Open a terminal window. 
 
 Currently the only way to install the binary is with cargo. 
 
@@ -75,25 +82,26 @@ For Windows users visit: https://forge.rust-lang.org/infra/other-installation-me
 
 You'll need to download and run the rustup-init executable. 
 
-Once install you can install the binary using ```cargo install```: 
+Once cargo has been installed your ready to download the binary, run the following: 
 
 ```cargo install braiin_clock```
 
 ## Running the binary
 
-Within a terminal window enter: ```braiin_clock```
+To run the program enter the following: ```braiin_clock```
 
 The program will start. 
 
 *If this command does not work make sure the ```.cargo/``` directory is on your Path.*
 
-
 ## How to use
 
 You'll be asked to enter you Braiins API Token and your Blockclock's IP address.
+If you enter this incorrectly or need to change it, just quit (CTRL+C) the program and restart it.
 
-Follow the instructions --> Select the tags you want to display and press "q" once you've selected your desired tags. Select the blockclock display refresh rate. If you want to change any of these settings you'll want to press CTRL+C to exit the program and start over.
+Follow the instructions --> Select the tags you want to display and press "q" once you've selected your desired tags. Select your desired display refresh rate (5 mins is best for me).
+If you want to change any of these settings you'll want to press CTRL+C to exit the program and start over.
 
 The Blockclock will display the tags in the selected order, continuously, until you exit the program, close the terminal or shutdown your computer. 
 
-This is a work in progress and there may be bugs. Please open an issue if you run into any. Thank you :D 
+This is a work in progress to help me learn Rust and Bitcoin so there there may be bugs. Please open an issue if you run into any or if you'd like to see new features. Thank you :D 
