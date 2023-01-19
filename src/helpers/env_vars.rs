@@ -29,7 +29,7 @@ pub fn check_env_var_exists() -> bool {
             println!("{key}, is set");
             is_set = true;
         } else {
-            println!("is NOT set");
+            println!("{key} is NOT set");
             return false;
         };
     }
