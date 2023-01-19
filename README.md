@@ -68,9 +68,7 @@ https://pool.braiins.com/login
 ## Installation
 
 The binary for braiin clock is... believe it or not, braiin_clock. 
-Once installed your enter **braiin_clock** in your terminal to run it. 
-
-Open a terminal window. 
+Once installed you'll enter **braiin_clock** in your terminal window to run it. 
 
 Currently the only way to install the binary is with cargo. 
 
@@ -82,13 +80,13 @@ For Windows users visit: https://forge.rust-lang.org/infra/other-installation-me
 
 You'll need to download and run the rustup-init executable. 
 
-Once cargo has been installed your ready to download the binary, run the following: 
+Once cargo has been installed you're ready to download the binary, run the following: 
 
 ```cargo install braiin_clock```
 
 ## Running the binary
 
-To run the program enter the following: ```braiin_clock```
+To run the program enter the following in a terminal window: ```braiin_clock```
 
 The program will start. 
 
@@ -99,9 +97,9 @@ The program will start.
 You'll be asked to enter you Braiins API Token and your Blockclock's IP address.
 If you enter this incorrectly or need to change it, just quit (CTRL+C) the program and restart it.
 
-Follow the instructions --> Select the tags you want to display and press "q" once you've selected your desired tags. Select your desired display refresh rate (5 mins is best for me).
+Follow the instructions --> Select the tags you want to display and press "q" after you've selected your desired tags. Select your desired refresh rate (5 minutes is best for me) and press enter.
 If you want to change any of these settings you'll want to press CTRL+C to exit the program and start over.
 
 The Blockclock will display the tags in the selected order, continuously, until you exit the program, close the terminal or shutdown your computer. 
 
-This is a work in progress to help me learn Rust and Bitcoin so there there may be bugs. Please open an issue if you run into any or if you'd like to see new features. Thank you :D 
+This is a work in progress to help me learn Rust and Bitcoin so there may be bugs. Please open an issue if you run into any or if you'd like to see new features. Thank you :D 
