@@ -9,13 +9,13 @@ returned to the caller if there's a match.
 */
 pub fn load_env_vars(var: &str) -> String {
     dotenv().ok();
-    let mut key_to_return: String = String::new();
+    let mut var_to_return: String = String::new();
     for (key, value) in env::vars() {
         if key == var {
-            key_to_return = value;
+            var_to_return = value;
         };
     }
-    return key_to_return;
+    return var_to_return;
 }
 
 // runs on program start and ensures that env vars are set
@@ -68,6 +68,8 @@ pub fn set_env_vars() {
     }
 }
 
+// truncates .env file if it exists or creates a new one 
+// Used to reset env vars. 
 pub fn reset_env_vars() {
     let path = "./.env";
     match fs::File::create(path) {

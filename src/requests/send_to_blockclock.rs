@@ -39,7 +39,7 @@ impl<'a> Url<'a> {
         );
     }
 
-    // use format! macro to build the Url into a String type - does not take query param.
+    // use format! macro to build the Url into a String type - ignores query param.
     fn build_blockclock_url(&self) -> String {
         return format!(
             "{}{}{}{}",

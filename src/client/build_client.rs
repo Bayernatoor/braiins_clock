@@ -4,6 +4,7 @@ use std::error::Error;
 
 const HEADERS: &str = "SlushPool-Auth-Token";
 
+// reqwest client factory, builds client with required header values 
 pub async fn create_client() -> Result<Client, Box<dyn Error>> {
     // Load required SLUSHPOOL_API_KEY
     let slushpool_api_key = load_env_vars("SLUSHPOOL_API_KEY");
