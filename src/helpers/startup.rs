@@ -57,14 +57,13 @@ pub fn select_tags() -> Vec<String> {
     // vector of 2 value tuples, 0 index is pretty value used to show user
     // index 1 is value required in URL to make calls to blocklock.
     let tags = Vec::from([
-        ("Confirmed Reward", "confirmed_reward"),
-        ("Unconfirmed Reward", "unconfirmed_reward"),
+        ("Current Balance", "current_balance"),
+        ("Today's Mining Reward", "today_reward"),
         ("Estimated Reward", "estimated_reward"),
         ("Alltime Reward", "all_time_reward"),
         ("Hashrate 5m", "hash_rate_5m"),
         ("Hashrate 60m", "hash_rate_60m"),
         ("Hashrate 24h", "hash_rate_24h"),
-        ("Hashrate Scoring", "hash_rate_scoring"),
         ("Active Workers", "ok_workers"),
         ("Offline workers", "off_workers"),
         ("Estimated Hash Rate", "cm.mining.hash_rate_2016_blocks"),

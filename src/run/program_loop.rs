@@ -23,9 +23,9 @@ pub async fn program_loop() {
         // determines which url builder to use based on tag selected
         // either slush pool url or blocklock url
         let url_to_send = match active_tag.as_ref() {
-            "confirmed_reward" | "all_time_reward" | "unconfirmed_reward" | "estimated_reward"
+            "current_balance" | "all_time_reward" | "today_reward" | "estimated_reward"
             | "off_workers" | "ok_workers" | "hash_rate_5m" | "hash_rate_60m" | "hash_rate_24h"
-            | "hash_rate_scoring" => {
+             => {
                 requests::send_to_blockclock::create_slush_url(active_tag.to_string(), symbol).await
             }
             _ => {

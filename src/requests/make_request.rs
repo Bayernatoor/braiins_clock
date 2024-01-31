@@ -15,20 +15,23 @@ pub struct Stats {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Btc {
-    pub confirmed_reward: String,
-    pub unconfirmed_reward: String,
+    pub current_balance: String,
+    pub today_reward: String,
     pub estimated_reward: String,
     pub all_time_reward: String,
     pub hash_rate_unit: String,
     pub hash_rate_5m: f64,
     pub hash_rate_60m: f64,
     pub hash_rate_24h: f64,
-    pub hash_rate_scoring: f64,
     pub hash_rate_yesterday: f64,
     pub low_workers: f64,
     pub off_workers: f64,
     pub ok_workers: f64,
     pub dis_workers: f64,
+    pub shares_5m: f64,
+    pub shares_60m: f64,
+    pub shares_24h: f64,
+    pub shares_yesterday: f64,
 }
 
 //makes a GET request to slushpool's api and returns a Struct<Stats> Result.

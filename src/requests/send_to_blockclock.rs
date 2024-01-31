@@ -51,12 +51,12 @@ impl<'a> Url<'a> {
 // matches the selected tag with the appropriate symbol for url construction
 pub fn select_symbol(tag: &str) -> String {
     let symbol = match tag {
-        "confirmed_reward" | "unconfirmed_reward" | "estimated_reward" | "all_time_reward" => {
+        "current_balance" | "today_reward" | "estimated_reward" | "all_time_reward" => {
             String::from("?sym=bitcoin")
         }
         "off_workers" => String::from("?pair=ASIC/DOWN"),
         "ok_workers" => String::from("?pair=ASIC/UP"),
-        "hash_rate_5m" | "hash_rate_60m" | "hash_rate_24h" | "hash_rate_scoring" => {
+        "hash_rate_5m" | "hash_rate_60m" | "hash_rate_24h" => {
             String::from("?pair=TH/S")
         }
         _ => String::from("?sym=bitcoin"),
@@ -77,15 +77,14 @@ pub async fn get_slushpool_stats<E>(tag: &str) -> Result<f64, Box<dyn Error>> {
             Ok(stats) => {
                 // return f64 value of selected tag - Strings are converted to floats.
                 let to_float = match tag {
-                    "confirmed_reward" => stats.btc.confirmed_reward.parse::<f64>(),
-                    "unconfirmed_reward" => stats.btc.unconfirmed_reward.parse::<f64>(),
+                    "current_balance" => stats.btc.current_balance.parse::<f64>(),
+                    "today_reward" => stats.btc.today_reward.parse::<f64>(),
                     "estimated_reward" => stats.btc.estimated_reward.parse::<f64>(),
                     "all_time_reward" => stats.btc.all_time_reward.parse::<f64>(),
                     "hash_rate_unit" => stats.btc.hash_rate_unit.parse::<f64>(),
                     "hash_rate_5m" => Ok(stats.btc.hash_rate_5m),
                     "hash_rate_60m" => Ok(stats.btc.hash_rate_60m),
                     "hash_rate_24h" => Ok(stats.btc.hash_rate_24h),
-                    "hash_rate_scoring" => Ok(stats.btc.hash_rate_scoring),
                     "hash_rate_yesterday" => Ok(stats.btc.hash_rate_yesterday),
                     "low_workers" => Ok(stats.btc.low_workers),
                     "off_workers" => Ok(stats.btc.off_workers),
@@ -160,7 +159,7 @@ pub async fn create_slush_url(tag: String, mut query: String) -> String {
         // formatted to represent terahash/second.
         let hash_formatted = hash_value.parse::<f64>().unwrap() / 1000.0;
         result_splice = hash_formatted.round().to_string();
-    } else if tag.contains("reward") {
+    } else if tag.contains("reward") | tag.contains("balance") {
         // may want to fix this to return less decimals,
         // scientific notation kicks in at 5 decimal points.
         result_splice = result[0..7].to_string();
